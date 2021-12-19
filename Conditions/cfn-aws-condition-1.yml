@@ -23,11 +23,21 @@ Mappings:
       instanceType: t2.micro
     Prod:
       instanceType: t2.small
-  
+
+Conditions:
+  CreateEIPForProd: !Equals [!Ref MyEnvName, Prod]
+
 Resources:
-  DevEC2Instance:
+  MyEC2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !FindInMap [ MyRegionMap, !Ref 'AWS::Region', HVM64 ]
       InstanceType: !FindInMap [ MyEnvMap, !Ref MyEnvName,  instanceType ]
       KeyName: !Ref MyKeyName
+  MyProdEIP:
+    Type: AWS::EC2::EIP
+    Condition: CreateEIPForProd
+    Properties:
+      InstanceId: !Ref MyEC2Instance
+
+
