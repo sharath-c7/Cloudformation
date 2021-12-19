@@ -1,0 +1,37 @@
+Resources:
+    myEC2Instance:
+      Type: AWS::EC2::Instance
+      Properties:
+        KeyName: cfn-key-1
+        ImageId: ami-052cef05d01020f1d
+        InstanceType: t2.micro
+        SecurityGroupIds:
+          - default
+          - !Ref secGroupName
+        Tags:
+          - Key: Name
+            Value: Demo-Instance
+    secGroupName:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: My new SSH SG
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: '22'
+            ToPort: '22'
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: tcp
+            FromPort: '8080'
+            ToPort: '8080'
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: tcp
+            FromPort: '8081'
+            ToPort: '8081'
+            CidrIP: 0.0.0.0/0            
+        Tags:
+          - Key: Name
+            Value: SSH-Security-Group
+    MyElasticIp:
+      Type: AWS::EC2::EIP
+      Properties:
+        InstanceId: !Ref myEC2Instance

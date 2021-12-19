@@ -1,0 +1,32 @@
+
+Parameters:
+  MyKeyName:
+    Description: Select the key pair
+    Type: AWS::EC2::KeyPair::KeyName
+  MyEnvName:
+    Description: Select the environment
+    Type: String
+    Default: Dev
+    AllowedValues:
+      - Dev
+      - Prod
+
+Mappings:
+  MyRegionMap:
+    ap-south-1:
+      HVM64: ami-052cef05d01020f1d
+    us-east-1:
+      HVM64: ami-0ed9277fb7eb570c9
+  MyEnvMap:
+    Dev:
+      instanceType: t2.micro
+    Prod:
+      instanceType: t2.small
+  
+Resources:
+  DevEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [ MyRegionMap, !Ref 'AWS::Region', HVM64 ]
+      InstanceType: !FindInMap [ MyEnvMap, !Ref MyEnvName,  instanceType ]
+      KeyName: !Ref MyKeyName

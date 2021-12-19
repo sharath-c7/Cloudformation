@@ -1,0 +1,12 @@
+Resources:
+    myEC2Instance:
+      Type: AWS::EC2::Instance
+      Properties:
+        KeyName: cfn-key-1
+        ImageId: ami-052cef05d01020f1d
+        InstanceType: t2.micro
+        SecurityGroupIds:
+          - default
+        Tags:
+          - Key: Name
+            Value: Demo-Instance
